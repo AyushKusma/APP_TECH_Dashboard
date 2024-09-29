@@ -13,7 +13,7 @@ export const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { auth, isLoading } = useSelector((state) => state.auth);
+  const { isLoading } = useSelector((state) => state.auth);
 
   const Schema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Enter your email"),

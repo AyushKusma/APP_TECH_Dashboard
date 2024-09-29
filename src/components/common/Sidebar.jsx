@@ -55,7 +55,7 @@ const menuItems = [
     link: "/services",
   },
   {
-    title: "Skills",
+    title: "Blogs",
     icon: <FaBookOpen size={iconSize} color={iconColor} />,
     link: "/blogs",
   },

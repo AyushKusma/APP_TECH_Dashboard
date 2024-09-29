@@ -25,12 +25,9 @@ const theme = createTheme({
 });
 
 function App() {
-  const dispatch = useDispatch();
   const [openSidebar, setOpenSidebar] = useState(
     JSON.parse(localStorage.getItem("openSidebar")) || false
   );
-
-  const { isLoading, userToken } = useSelector((state) => state.auth);
 
   function toggleSidebar() {
     setOpenSidebar(!openSidebar);

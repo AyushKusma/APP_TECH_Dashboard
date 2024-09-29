@@ -8,7 +8,7 @@ export const ProtectedRoute = ({ element }) => {
   useEffect(() => {
     dispatch(checkToken());
   }, [dispatch]);
-  const { auth, userToken } = useSelector((state) => state.auth);
+  const { auth } = useSelector((state) => state.auth);
 
   console.log(auth, "PROTCROUT");
 

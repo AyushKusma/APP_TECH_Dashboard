@@ -13,12 +13,12 @@ import { FormUploadImage } from "../../components/form/FormUploadImage";
 import { addBlogs, editBlogs } from "../../redux/slices/BlogsSlice";
 import { imageApiUrl } from "../../utils/apiConfig";
 import slugGenerator from "../../utils/slugGenerator";
+import { FormTextAreaField } from "../../components/form/FormTextAreaField";
 
 export const AddBlogs = ({ toggleOpen, cat_id, isEdit, editData }) => {
   const dispatch = useDispatch();
 
   const { category } = useSelector((state) => state.category);
-  const { blogs } = useSelector((state) => state.blogs);
 
   const subBlogs = category.filter((item) => item.category_id === cat_id);
 
@@ -151,22 +151,14 @@ export const AddBlogs = ({ toggleOpen, cat_id, isEdit, editData }) => {
             optionsData={subBlogs}
           />
         </div>
-        <div className="flex gap-2">
-          <FormTextField
-            name="description"
-            label="Description"
-            type="text"
-            multiline={true}
-            rows={3}
-          />
-          <FormTextField
-            name="summary"
-            label="Summary"
-            type="text"
-            multiline={true}
-            rows={3}
-          />
-        </div>
+        <FormTextField
+          name="summary"
+          label="Summary"
+          type="text"
+          multiline={true}
+          rows={3}
+        />
+        <FormTextAreaField name="description" />
 
         <FormTextField name="meta_title" label="Meta Title" type="text" />
         <div className="flex gap-2">
