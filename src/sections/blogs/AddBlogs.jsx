@@ -15,7 +15,13 @@ import { imageApiUrl } from "../../utils/apiConfig";
 import slugGenerator from "../../utils/slugGenerator";
 import { FormTextAreaField } from "../../components/form/FormTextAreaField";
 
-export const AddBlogs = ({ toggleOpen, cat_id, isEdit, editData }) => {
+export const AddBlogs = ({
+  toggleOpen,
+  cat_id,
+  isEdit,
+  editData,
+  isView = false,
+}) => {
   const dispatch = useDispatch();
 
   const { category } = useSelector((state) => state.category);
@@ -82,7 +88,7 @@ export const AddBlogs = ({ toggleOpen, cat_id, isEdit, editData }) => {
     setValue("slug", slugGenerator(name || ""));
   }, [name, setValue]);
 
-  const onAddSubmit = (data) => {
+  const onSubmit = (data) => {
     const formData = new FormData();
     if (data.image === null) {
       toast.error("Please select an image");
@@ -99,70 +105,73 @@ export const AddBlogs = ({ toggleOpen, cat_id, isEdit, editData }) => {
     formData.append("meta_keywords", data.meta_keywords);
     formData.append("image", data.image[0]);
 
-    dispatch(
-      addBlogs({
-        data: formData,
-        toggleOpen: toggleOpen,
-      })
-    );
-  };
-
-  const onEditSubmit = (data) => {
-    const formData = new FormData();
-    if (data.image === null) {
-      toast.error("Please select an image");
-      return;
+    {
+      isEdit
+        ? dispatch(
+            editBlogs({
+              data: formData,
+              slug: editData?.slug,
+              toggleOpen: toggleOpen,
+            })
+          )
+        : dispatch(
+            addBlogs({
+              data: formData,
+              toggleOpen: toggleOpen,
+            })
+          );
     }
-    formData.append("featured", data.featured ? 1 : 0);
-    formData.append("name", data.name);
-    formData.append("slug", data.slug);
-    formData.append("category_id", data.category_id.id);
-    formData.append("description", data.description);
-    formData.append("summary", data.summary);
-    formData.append("meta_title", data.meta_title);
-    formData.append("meta_description", data.meta_description);
-    formData.append("meta_keywords", data.meta_keywords);
-    formData.append("image", data.image[0]);
-
-    dispatch(
-      editBlogs({
-        data: formData,
-        slug: data.slug,
-        toggleOpen: toggleOpen,
-      })
-    );
   };
 
   return (
-    <FormProvider
-      methods={methods}
-      onSubmit={isEdit ? handleSubmit(onEditSubmit) : handleSubmit(onAddSubmit)}
-    >
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-4">
         <div className="flex justify-end">
-          <FormSwitchButton name="featured" label="Featured" />
+          <FormSwitchButton
+            name="featured"
+            label="Featured"
+            disabled={isView}
+          />
         </div>
         <div className="flex gap-2">
-          <FormTextField name="name" label="Name" type="text" />
-          <FormTextField name="slug" label="Slug" type="text" />
+          <FormTextField
+            disabled={isView}
+            name="name"
+            label="Name"
+            type="text"
+          />
+          <FormTextField
+            disabled={isView}
+            name="slug"
+            label="Slug"
+            type="text"
+          />
           <FormAutoComplete
+            disabled={isView}
             name="category_id"
             label="Blogs Category"
             optionsData={subBlogs}
           />
         </div>
         <FormTextField
+          disabled={isView}
           name="summary"
           label="Summary"
           type="text"
           multiline={true}
           rows={3}
         />
-        <FormTextAreaField name="description" />
+        <FormTextAreaField name="description" readOnly={isView} />
 
-        <FormTextField name="meta_title" label="Meta Title" type="text" />
+        <FormTextField
+          disabled={isView}
+          name="meta_title"
+          label="Meta Title"
+          type="text"
+        />
         <div className="flex gap-2">
           <FormTextField
+            disabled={isView}
             name="meta_keywords"
             label="Meta Keywords"
             type="text"
@@ -170,6 +179,7 @@ export const AddBlogs = ({ toggleOpen, cat_id, isEdit, editData }) => {
             rows={3}
           />
           <FormTextField
+            disabled={isView}
             name="meta_description"
             label="Meta Description"
             type="text"
@@ -180,6 +190,7 @@ export const AddBlogs = ({ toggleOpen, cat_id, isEdit, editData }) => {
         <div className="flex flex-col w-full">
           <span className="font-bold p-2">Upload Your Image Here *</span>
           <FormUploadImage
+            disabled={isView}
             name="image"
             file={file || defaultValues?.image}
             onDrop={onSingleDrop}
@@ -190,31 +201,33 @@ export const AddBlogs = ({ toggleOpen, cat_id, isEdit, editData }) => {
           </span>
         </div>
       </div>
-      <div className="flex justify-end gap-2 mt-5">
-        <span
-          className="border-2 border-red-500 text-red-500 rounded-lg flex justify-center items-center px-4 shadow-md hover:bg-red-500 hover:text-white transition-all cursor-pointer"
-          onClick={toggleOpen}
-        >
-          Cancel
-        </span>
-        <button
-          type="submit"
-          disabled={blogsLoading}
-          className={`${
-            blogsLoading ? "bg-gray-500" : "bg-primary hover:bg-secondary"
-          } flex gap-2 rounded-lg shadow-md p-2 px-4 text-white transition-all `}
-        >
-          {blogsLoading ? (
-            <CircularProgress
-              sx={{
-                color: "white",
-              }}
-              size={24}
-            />
-          ) : null}
-          {isEdit ? "Edit Blogs" : "Add Blogs"}
-        </button>
-      </div>
+      {isView === false && (
+        <div className="flex justify-end gap-2 mt-5">
+          <span
+            className="border-2 border-red-500 text-red-500 rounded-lg flex justify-center items-center px-4 shadow-md hover:bg-red-500 hover:text-white transition-all cursor-pointer"
+            onClick={toggleOpen}
+          >
+            Cancel
+          </span>
+          <button
+            type="submit"
+            disabled={blogsLoading}
+            className={`${
+              blogsLoading ? "bg-gray-500" : "bg-primary hover:bg-secondary"
+            } flex gap-2 rounded-lg shadow-md p-2 px-4 text-white transition-all `}
+          >
+            {blogsLoading ? (
+              <CircularProgress
+                sx={{
+                  color: "white",
+                }}
+                size={24}
+              />
+            ) : null}
+            {isEdit ? "Edit Blogs" : "Add Blogs"}
+          </button>
+        </div>
+      )}
     </FormProvider>
   );
 };

@@ -11,6 +11,7 @@ export const FormUploadImage = ({
   onDrop,
   file,
   onRemove,
+  disabled,
 }) => {
   const { control } = useFormContext();
 
@@ -34,7 +35,7 @@ export const FormUploadImage = ({
         return (
           <div className="flex w-full">
             <div className="flex w-full justify-center " {...getRootProps()}>
-              <input {...getInputProps()} />
+              <input {...getInputProps()} disabled={disabled} />
 
               {file ? (
                 <div className={`w-[${width}] flex justify-center rounded`}>

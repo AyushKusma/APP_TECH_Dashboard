@@ -3,7 +3,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-export const FormTextAreaField = ({ name, placeholder, label }) => {
+export const FormTextAreaField = ({ name, placeholder, label, readOnly }) => {
   const { control } = useFormContext();
   const quillRef = useRef(null);
 
@@ -50,10 +50,10 @@ export const FormTextAreaField = ({ name, placeholder, label }) => {
         render={({ field, fieldState: { error } }) => (
           <>
             <ReactQuill
-              className=""
               placeholder={placeholder}
               ref={quillRef}
               theme="snow"
+              readOnly={readOnly}
               modules={{
                 toolbar: "#toolbar",
               }}

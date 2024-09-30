@@ -10,6 +10,7 @@ import { AddBlogs } from "../sections/blogs/AddBlogs";
 export const Blogs = () => {
   const [open, setOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [isView, setIsView] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [editData, setEditData] = useState("");
   const { openSB } = useContext(SidebarContext);
@@ -55,10 +56,16 @@ export const Blogs = () => {
         handleEditData={handleEditData}
         toggleOpenEdit={toggleOpenEdit}
         setIsEdit={setIsEdit}
+        setIsView={setIsView}
       />
       {/* Add Blogs */}
       <AddDialog open={open} toggleOpen={toggleOpen} title="Add Blogs" max="lg">
-        <AddBlogs toggleOpen={toggleOpen} isEdit={isEdit} cat_id={categoryID} />
+        <AddBlogs
+          toggleOpen={toggleOpen}
+          isEdit={isEdit}
+          cat_id={categoryID}
+          isView={isView}
+        />
       </AddDialog>
       {/* Edit Blogs */}
       <AddDialog
@@ -72,6 +79,7 @@ export const Blogs = () => {
           cat_id={categoryID}
           editData={editData}
           isEdit={isEdit}
+          isView={isView}
         />
       </AddDialog>
     </div>

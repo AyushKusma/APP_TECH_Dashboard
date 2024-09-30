@@ -2,7 +2,7 @@ import { FormControlLabel, Switch } from "@mui/material";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
-export const FormSwitchButton = ({ name, label }) => {
+export const FormSwitchButton = ({ name, label, disabled }) => {
   const { control } = useFormContext();
 
   return (
@@ -13,7 +13,12 @@ export const FormSwitchButton = ({ name, label }) => {
         return (
           <FormControlLabel
             control={
-              <Switch checked={field.value} defaultValue={false} {...field} />
+              <Switch
+                checked={field.value}
+                defaultValue={false}
+                {...field}
+                disabled={disabled}
+              />
             }
             label={label}
           />

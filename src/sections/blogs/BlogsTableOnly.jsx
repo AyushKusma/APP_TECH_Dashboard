@@ -29,6 +29,7 @@ export const BlogsTableOnly = ({
   handleEditData,
   toggleOpenEdit,
   setIsEdit,
+  setIsView,
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -91,10 +92,23 @@ export const BlogsTableOnly = ({
                 <TableRow key={item.id}>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.slug}</TableCell>
-                  <TableCell>{item.description}</TableCell>
+                  <TableCell>
+                    <p
+                      className="line-clamp-3"
+                      dangerouslySetInnerHTML={{
+                        __html: item?.description,
+                      }}
+                    />
+                  </TableCell>
                   <TableCell>{item.meta_title}</TableCell>
-                  <TableCell>{item.meta_description}</TableCell>
-                  <TableCell>{item.meta_keywords}</TableCell>
+                  <TableCell>
+                    <span className="line-clamp-3">
+                      {item.meta_description}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className="line-clamp-3">{item.meta_keywords}</span>
+                  </TableCell>
                   <TableCell>
                     <div className="flex gap-1">
                       <IconButton
@@ -120,6 +134,17 @@ export const BlogsTableOnly = ({
                       >
                         <MdDelete size={20} />
                       </IconButton>
+                      <button
+                        className="text-nowrap bg-primary text-white px-2 rounded-md hover:bg-secondary duration-200"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditData(item.slug);
+                          toggleOpenEdit();
+                          setIsView(true);
+                        }}
+                      >
+                        View Blog
+                      </button>
                     </div>
                   </TableCell>
                 </TableRow>
